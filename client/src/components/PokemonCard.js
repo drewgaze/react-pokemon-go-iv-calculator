@@ -68,7 +68,7 @@ class PokemonCard extends Component {
 	async getIvs() {
 		const headers = {
 			'Accept': 'application/json',
-			'Content-Type': 'text/plain'
+			'Content-Type': 'application/json'
 		}
 		const pokemon = {
 			name: this.state.pokemon,
@@ -78,10 +78,9 @@ class PokemonCard extends Component {
 			poweredUp: this.state.poweredUp
 		}
 		try {
-			let res = await fetch('http://' + window.location.hostname + ':3001/iv', {
+			let res = await fetch('/iv', {
 				headers: headers,
 				method: 'POST',
-				mode: 'cors',
 				body: JSON.stringify(pokemon)
 			});
 			let ivs = await res.json();
