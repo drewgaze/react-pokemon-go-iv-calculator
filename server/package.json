@@ -4,7 +4,7 @@
   "description": "api for pokemon iv calculator",
   "main": "server.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "concurrently \"nodemon server.js\" \"npm run client\"",
     "client": "cd ../client && npm run start",
     "server": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -19,6 +19,7 @@
     "pokemon-go-iv-calculator": "git+https://github.com/drewgaze/pokemon-go-iv-calculator.git"
   },
   "devDependencies": {
-    "concurrently": "^3.5.0"
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.11.0"
   }
 }

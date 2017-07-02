@@ -7,7 +7,7 @@ const 	express = require('express'),
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({type: '*/*'}));
 app.use(cors())
 
 app

@@ -3,6 +3,7 @@ import {Card, CardHeader} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Toggle from 'material-ui/Toggle';
+import Snackbar from 'material-ui/Snackbar';
 import PokemonIvPercentBar from './PokemonIvPercentBar';
 import PokemonAutoComplete from './PokemonAutoComplete';
 import PokemonImage from './PokemonImage';
@@ -27,33 +28,37 @@ class PokemonCard extends Component {
 			minIvPerfection: 0,
 			maxIvPerfection: 0,
 			averageIvPerfection: 0,
-			grade: ''
+			grade: '',
+			error: false
 		}
+	}
+
+	handleTouchTap(evt) {
+		this.getIvs();
 	}
 
 	handlePokemonChange(pokemon) {
 		this.setState({pokemon: pokemon});
-		console.log('selected', pokemon);
 	}
 
 	handleCpChange(evt, cp) {
 		this.setState({cp});
-		console.log('cp', cp);
 	}
 
 	handleHpChange(evt, hp) {
 		this.setState({hp});
-		console.log('hp', hp);
 	}
 
 	handleDustChange(evt, dust) {
 		this.setState({dust})
-		console.log('dust', dust)
 	}
 
 	handlePoweredUpChange(evt, poweredUp) {
 		this.setState({poweredUp});
-		console.log('powered up', poweredUp);
+	}
+
+	handleRequestClose() {
+		this.setState({error: false});
 	}
 
 	getIvRange() {
@@ -63,7 +68,7 @@ class PokemonCard extends Component {
 	async getIvs() {
 		const headers = {
 			'Accept': 'application/json',
-			'Content-Type': 'application/json'
+			'Content-Type': 'text/plain'
 		}
 		const pokemon = {
 			name: this.state.pokemon,
@@ -72,26 +77,26 @@ class PokemonCard extends Component {
 			dust: this.state.dust,
 			poweredUp: this.state.poweredUp
 		}
-		console.log('values', pokemon);
-		//TODO: add error handling
-		let res = await fetch('http://' + window.location.hostname + ':3001/iv', {
-			headers: headers,
-			method: 'POST',
-			mode: 'cors',
-			body: JSON.stringify(pokemon)
-		});
-		let ivs = await res.json();
-		console.log('ivs', ivs);
-		this.setState({
-			minIvPerfection: parseInt((ivs.ivs.shift().perfection*100).toFixed(0), 10),
-			maxIvPerfection: parseInt((ivs.ivs.pop().perfection*100).toFixed(0), 10),
-			grade: ivs.grade.averageGrade.letter 
-		});
-		console.log('state before avg', this.state);
-		this.setState({
-			averageIvPerfection: ((this.state.minIvPerfection + this.state.maxIvPerfection)/2),
-		})
-		console.log('state', this.state);
+		try {
+			let res = await fetch('http://' + window.location.hostname + ':3001/iv', {
+				headers: headers,
+				method: 'POST',
+				mode: 'cors',
+				body: JSON.stringify(pokemon)
+			});
+			let ivs = await res.json();
+			let minIvPerfection = parseInt((ivs.ivs.shift().perfection*100).toFixed(0), 10),
+				maxIvPerfection = parseInt((ivs.ivs.pop().perfection*100).toFixed(0), 10),
+				averageIvPerfection = ((minIvPerfection + maxIvPerfection)/2);
+			this.setState({
+				minIvPerfection,
+				maxIvPerfection,
+				averageIvPerfection,
+				grade: ivs.grade.averageGrade.letter 
+			});
+		} catch (error) {
+			this.setState({error: true});
+		}
 	}
 
 	render() {
@@ -140,9 +145,17 @@ class PokemonCard extends Component {
 							label="Calculate IV"
 							primary={true}
 							fullWidth={true}
-							onClick={this.getIvs.bind(this)}
+							onTouchTap={this.handleTouchTap.bind(this)}
 						/>
 					</div>
+					<Snackbar
+						open={this.state.error}
+						message="Unable to determine IVs."
+						action="dismiss"
+						autoHideDuration={4000}
+						onRequestClose={this.handleRequestClose.bind(this)}
+						onActionTouchTap={this.handleRequestClose.bind(this)}
+					/>
 			    </Card>
 	         </div>
 		);
