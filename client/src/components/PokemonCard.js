@@ -62,7 +62,7 @@ class PokemonCard extends Component {
 	}
 
 	getIvRange() {
-		return this.state.minIvPerfection + '% - ' + this.state.maxIvPerfection + '%';
+		return (this.state.minIvPerfection === this.state.maxIvPerfection) ? this.state.minIvPerfection + '%' : this.state.minIvPerfection + '% - ' + this.state.maxIvPerfection + '%';
 	}
 
 	async getIvs() {
@@ -85,8 +85,8 @@ class PokemonCard extends Component {
 			});
 			let ivs = await res.json();
 			let minIvPerfection = parseInt((ivs.ivs.shift().perfection*100).toFixed(0), 10),
-				maxIvPerfection = parseInt((ivs.ivs.pop().perfection*100).toFixed(0), 10),
-				averageIvPerfection = ((minIvPerfection + maxIvPerfection)/2);
+				maxIvPerfection = (ivs.ivs.length > 0) ? parseInt((ivs.ivs.pop().perfection*100).toFixed(0), 10) : minIvPerfection,
+				averageIvPerfection = (minIvPerfection === maxIvPerfection) ? maxIvPerfection : (minIvPerfection + maxIvPerfection)/2;
 			this.setState({
 				minIvPerfection,
 				maxIvPerfection,
@@ -94,6 +94,7 @@ class PokemonCard extends Component {
 				grade: ivs.grade.averageGrade.letter 
 			});
 		} catch (error) {
+			console.error(error);
 			this.setState({error: true});
 		}
 	}
