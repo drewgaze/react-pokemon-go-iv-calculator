@@ -7,10 +7,10 @@ class PokemonAutoComplete extends Component {
 		return (
 			<div>
 				<AutoComplete
-				floatingLabelText="Pokemon"
-				dataSource={Pokemon.map(pokemon => pokemon.name)}
-				filter={AutoComplete.caseInsensitiveFilter}
-				onNewRequest={this.props.onNewRequest}
+					floatingLabelText="Pokemon"
+					dataSource={Pokemon.map(pokemon => pokemon.name)}
+					filter={AutoComplete.caseInsensitiveFilter}
+					onNewRequest={this.props.onNewRequest}
 				/>
 			</div>
 		);

@@ -10,7 +10,7 @@
 .App-header {
   background-color: #222;
   height: 150px;
-  padding: 20px;
+  padding: 1.250em;
   color: white;
 }
 
@@ -21,7 +21,7 @@
 .pokemonGif {
   display: block;
   margin: auto;
-  margin-top: 14px;
+  margin-top: 0.875em;
 }
 
 input[type=number]::-webkit-inner-spin-button, 

@@ -12,7 +12,7 @@ const cardStyle = {
 }
 
 const toggleStyle = {
-	marginTop: 14
+	marginTop: '0.875em'
 }
 
 class PokemonCard extends Component {
@@ -73,6 +73,7 @@ class PokemonCard extends Component {
 			poweredUp: this.state.poweredUp
 		}
 		console.log('values', pokemon);
+		//TODO: add error handling
 		let res = await fetch('http://' + window.location.hostname + ':3001/iv', {
 			headers: headers,
 			method: 'POST',

@@ -6,6 +6,4 @@ const calculate = (req, res, next) => {
 	res.send(calculator.evaluate(pokemon.name, pokemon.cp, pokemon.hp, pokemon.dust, pokemon.poweredUp));
 }
 
-module.exports = {
-	calculate: calculate
-}
+module.exports = {calculate}
