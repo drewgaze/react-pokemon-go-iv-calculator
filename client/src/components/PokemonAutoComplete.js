@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AutoComplete from 'material-ui/AutoComplete';
-import {pokemon as Pokemon} from 'pokemon-go-iv-calculator';
+import * as Pokemon from '../json/pokemon';
 
 class PokemonAutoComplete extends Component {
 	render() {
